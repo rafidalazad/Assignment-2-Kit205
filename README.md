@@ -20,4 +20,6 @@ Files
 use the graphviz.dot file in https://dreampuf.github.io/GraphvizOnline/#digraph%20RoadNetwork%20%7B%0D%0A%20%20%20%20node%20%5Bshape%3Dcircle%5D%3B%0D%0A%20%20%20%200%20-%3E%201%20%5Blabel%3D%221%22%5D%3B%0D%0A%20%20%20%200%20-%3E%202%20%5Blabel%3D%223%22%5D%3B%0D%0A%20%20%20%201%20-%3E%203%20%5Blabel%3D%222%22%5D%3B%0D%0A%20%20%20%201%20-%3E%204%20%5Blabel%3D%224%22%5D%3B%0D%0A%20%20%20%202%20-%3E%203%20%5Blabel%3D%221%22%5D%3B%0D%0A%20%20%20%204%20-%3E%203%20%5Blabel%3D%222%22%5D%3B%0D%0A%20%20%20%204%20-%3E%206%20%5Blabel%3D%226%22%5D%3B%0D%0A%20%20%20%205%20-%3E%206%20%5Blabel%3D%222%22%5D%3B%0D%0A%20%20%20%205%20-%3E%204%20%5Blabel%3D%221%22%5D%3B%0D%0A%7D%0D%0A to visualize the graph
 
 Compilation
-To compile the project, use the provided Makefile. Open a terminal in the project directory and run:
+Use the following command to compile the project:
+```sh
+gcc -o main main.c graph.c dijkstra.c approximate_solution.c road_network.c test_utilities.c -lm
