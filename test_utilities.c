@@ -1,34 +1,29 @@
-#include "test_utilities.h"
+#include "graph.h"
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
 
-RoadNetwork* generateRandomGraph(int rows, int cols) {
-    RoadNetwork* network = initializeRoadNetwork(rows, cols);
-    srand(time(NULL));
+Graph* generateRandomGraph(int V) {
+    srand(time(NULL)); // Seed for random number generation. Call this line in the main function of tests if it causes repeated results.
+    
+    Graph *graph = createGraph(V);
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            network->grid[i][j] = rand() % 10 + 1; // Random values between 1 and 10
+    // Generate random edges
+    for (int i = 0; i < V; i++) {
+        int edges = rand() % V; // Random number of edges for each vertex
+        for (int j = 0; j < edges; j++) {
+            int to = rand() % V;
+            int weight = (rand() % 10) + 1; // Random weight between 1 and 10
+            addEdge(graph, i, to, weight);
         }
     }
 
-    return network;
+    return graph;
 }
 
 void initializeFixedGraph(RoadNetwork* network, int value) {
     for (int i = 0; i < network->rows; i++) {
         for (int j = 0; j < network->cols; j++) {
-            network->grid[i][j] = value; // Set all grid values to the specified value
+            network->grid[i][j] = value;
         }
-    }
-}
-
-void printGrid(RoadNetwork* network) {
-    for (int i = 0; i < network->rows; i++) {
-        for (int j = 0; j < network->cols; j++) {
-            printf("%d ", network->grid[i][j]);
-        }
-        printf("\n");
     }
 }
