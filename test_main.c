@@ -3,40 +3,73 @@
 #include "dijkstra.h"
 #include "approximate_solution.h"
 #include "road_network.h"
+#include "graph.h"
 #include "time.h"
 #include "test_main.h"
 #include "test_utilities.h"
 
+void runDijkstraTest(Graph *graph, int startVertex);
+void runApproximateTest(Graph *graph, int startVertex);
+void compareSolutions(Graph *graph, int startVertex);
+
 int main() {
-    // Initialize the road network
-    int rows = 5, cols = 5;
-    RoadNetwork* network = initializeRoadNetwork(rows, cols);
+    // Prompt the user to select a dataset
+    int choice;
+    printf("Select a dataset to test:\n");
+    printf("1. Random 5x5 Grid\n");
+    printf("2. Belgium Road Network\n");
+    printf("3. Minnesota Road Network\n");
+    scanf("%d", &choice);
 
-    printf("Enter starting point (x y): ");
-    Point start;
-    scanf("%d %d", &start.x, &start.y);
+    Graph *graph = NULL;
+    int V = 0;
+    switch(choice) {
+        case 1:
+            graph = generateRandomGraph(5, 5); // Random 5x5 grid
+            V = graph->V;
+            break;
+        case 2:
+            graph = readGraph("road-belgium-osm.mtx");
+            if (!graph) {
+                printf("Failed to load Belgium road network\n");
+                return 1;
+            }
+            V = graph->V;
+            break;
+        case 3:
+            graph = readGraph("road-minnesota.mtx");
+            if (!graph) {
+                printf("Failed to load Minnesota road network\n");
+                return 1;
+            }
+            V = graph->V;
+            break;
+        default:
+            printf("Invalid choice\n");
+            return 1;
+    }
 
-    printf("Enter ending point (x y): ");
-    Point end;
-    scanf("%d %d", &end.x, &end.y);
+    printf("Enter starting vertex: ");
+    int startVertex;
+    scanf("%d", &startVertex);
 
     // Run the Dijkstra's test with timing
     printf("\nRunning Dijkstra's Algorithm...\n");
     startTimer();
-    runDijkstraTest(network, start, end);
+    runDijkstraTest(graph, startVertex);
     stopTimer();
     printf("Time elapsed for Dijkstra's Algorithm: %f seconds\n", getTimeElapsed());
 
     // Run the approximate solution test with timing
     printf("\nRunning Approximate Solution...\n");
     startTimer();
-    runApproximateTest(network, start, end);
+    runApproximateTest(graph, startVertex);
     stopTimer();
     printf("Time elapsed for Approximate Solution: %f seconds\n", getTimeElapsed());
 
     // Compare solutions
     printf("\nComparing Solutions...\n");
-    compareSolutions(network, start, end);
+    compareSolutions(graph, startVertex);
 
     // Measure memory usage
     int memoryUsage = getMemoryUsage();
@@ -52,31 +85,33 @@ int main() {
     printf("\nAll tests completed!\n");
 
     // Free the dynamically allocated memory
-    freeRoadNetwork(network);
+    freeGraph(graph);
 
     return 0;
 }
 
-void runDijkstraTest(RoadNetwork* network, Point start, Point end) {
-    int dist = dijkstra(network, start, end);
-    printf("Dijkstra's distance: %d\n", dist);
-}
-
-void runApproximateTest(RoadNetwork* network, Point start, Point end) {
-    int dist = approximateSolution(network, start, end);
-    printf("Approximate solution distance: %d\n", dist);
-}
-
-void compareSolutions(RoadNetwork* network, Point start, Point end) {
-    int dijkstraDist = dijkstra(network, start, end);
-    int approxDist = approximateSolution(network, start, end);
-    printf("Dijkstra's distance: %d\n", dijkstraDist);
-    printf("Approximate distance: %d\n", approxDist);
-    if (dijkstraDist == approxDist) {
-        printf("Both solutions are equal!\n");
-    } else {
-        printf("The solutions differ!\n");
+void runDijkstraTest(Graph *graph, int startVertex) {
+    int V = graph->V;
+    int dist[V];
+    dijkstraGraph(graph, startVertex, dist);
+    printf("Dijkstra's distances from vertex %d:\n", startVertex);
+    for (int i = 0; i < V; i++) {
+        printf("Vertex %d: %d\n", i, dist[i]);
     }
+}
+
+void runApproximateTest(Graph *graph, int startVertex) {
+    // Note: Approximate solution function needs to be adapted to work with Graph structure
+    // Placeholder for approximate solution code
+    printf("Approximate solution is not implemented for Graph structure.\n");
+}
+
+void compareSolutions(Graph *graph, int startVertex) {
+    int V = graph->V;
+    int dijkstraDist[V];
+    dijkstraGraph(graph, startVertex, dijkstraDist);
+    // Placeholder for comparison code
+    printf("Comparison between Dijkstra and Approximate solution is not implemented for Graph structure.\n");
 }
 
 void testDijkstra() {
