@@ -12,8 +12,22 @@ void compareSolutions(RoadNetwork* network, Point start, Point end);
 void testDijkstra();
 void testApproximateSolution();
 
+// Timer functions for performance measurement
+static clock_t start_time;
+
+void startTimer() {
+    start_time = clock();
+}
+
+double getTimeElapsed() {
+    clock_t end_time = clock();
+    return (double)(end_time - start_time) / CLOCKS_PER_SEC;
+}
+
 int main() {
-    RoadNetwork* network = initRoadNetwork(5, 5);  // We've replaced initializeRoadNetwork with initRoadNetwork
+    // Initialize the road network
+    int rows = 5, cols = 5;
+    RoadNetwork* network = initializeRoadNetwork(rows, cols); 
 
     printf("Enter starting point (x y): ");
     Point start;
@@ -27,14 +41,12 @@ int main() {
     printf("\nRunning Dijkstra's Algorithm...\n");
     startTimer();
     runDijkstraTest(network, start, end);
-    stopTimer();
     printf("Time elapsed for Dijkstra's Algorithm: %f seconds\n", getTimeElapsed());
 
     // Run the approximate solution test with timing
     printf("\nRunning Approximate Solution...\n");
     startTimer();
     runApproximateTest(network, start, end);
-    stopTimer();
     printf("Time elapsed for Approximate Solution: %f seconds\n", getTimeElapsed());
 
     // Compare solutions
@@ -50,6 +62,7 @@ int main() {
 
     printf("\nAll tests completed!\n");
 
+    // Free the dynamically allocated memory
     freeRoadNetwork(network);
 
     return 0;
@@ -78,7 +91,7 @@ void compareSolutions(RoadNetwork* network, Point start, Point end) {
 }
 
 void testDijkstra() {
-    RoadNetwork* testNetwork = initRoadNetwork(5, 5);
+    RoadNetwork* testNetwork = initializeRoadNetwork(5, 5);
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
             testNetwork->grid[i][j] = 1;  // setting all grid values to 1 for simplicity
@@ -91,7 +104,7 @@ void testDijkstra() {
 }
 
 void testApproximateSolution() {
-    RoadNetwork* testNetwork = initRoadNetwork(5, 5);
+    RoadNetwork* testNetwork = initializeRoadNetwork(5, 5);
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
             testNetwork->grid[i][j] = 1;  // setting all grid values to 1 for simplicity
@@ -102,3 +115,4 @@ void testApproximateSolution() {
     assert(approximateSolution(testNetwork, start, end) >= 8);  
     freeRoadNetwork(testNetwork);
 }
+
