@@ -2,6 +2,7 @@
 #include "graph.h"
 #include "dijkstra.h"
 #include "test_utilities.h"
+#include "test_procedural.h"
 
 void testRandomGraph() {
     Graph* g = generateRandomGraph(10, 15); // Generate a random graph with 10 vertices and 15 edges
