@@ -1,16 +1,24 @@
 #ifndef ROAD_NETWORK_H
 #define ROAD_NETWORK_H
 
-// Represents the road network as a 2D grid
+// Structure to represent a point with x and y coordinates
 typedef struct {
-    int** grid;        // A pointer to a 2D array representing the network
-    int width, height; // Dimensions of the grid
+    int x;
+    int y;
+} Point;
+
+// Structure to represent the road network or 2D grid
+typedef struct {
+    int** grid; // 2D array representing the grid weights
+    int rows;   // Number of rows in the grid
+    int cols;   // Number of columns in the grid
 } RoadNetwork;
 
-// Function to initialize the road network with the given dimensions
-RoadNetwork* initRoadNetwork(int width, int height);
+// Function to initialize the road network
+// Allocates memory for the grid and initializes it
+RoadNetwork* initializeRoadNetwork(int rows, int cols);
 
-// Function to free any memory allocated for the road network
+// Function to free the allocated memory for the road network
 void freeRoadNetwork(RoadNetwork* network);
 
 #endif // ROAD_NETWORK_H
