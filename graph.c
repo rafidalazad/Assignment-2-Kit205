@@ -40,17 +40,30 @@ Graph *readGraph(const char *filename) {
         return NULL;
     }
 
-    int V, from, to, weight;
-    if (fscanf(file, "%d", &V) != 1) {
-        printf("Error reading number of vertices\n");
+    // Skip the header of the Matrix Market file
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        if (line[0] != '%') {
+            break;
+        }
+    }
+
+    // Read the dimensions and the number of edges
+    int V, E;
+    if (sscanf(line, "%d %d %d", &V, &V, &E) != 3) {
+        printf("Error reading graph dimensions\n");
         fclose(file);
         return NULL;
     }
 
     Graph *g = createGraph(V);
     
-    while (fscanf(file, "%d,%d,%d", &from, &to, &weight) == 3) {
-        addEdge(g, from, to, weight);
+    int from, to;
+    while (fscanf(file, "%d %d", &from, &to) == 2) {
+        from--; // Convert to 0-based index
+        to--;   // Convert to 0-based index
+        addEdge(g, from, to, 1); // Assume weight is 1 if not provided
+        addEdge(g, to, from, 1); // Since the graph is undirected
     }
     
     fclose(file);
@@ -79,4 +92,3 @@ void freeGraph(Graph *g) {
     free(g->edges);
     free(g);
 }
-
