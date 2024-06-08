@@ -40,3 +40,7 @@ void calculateInDegrees(Graph *graph, int *inDegrees);
 void freeGraph(Graph *g);
 
 #endif // GRAPH_H
+
+void freeGraph(Graph *g);
+
+#endif // GRAPH_H
