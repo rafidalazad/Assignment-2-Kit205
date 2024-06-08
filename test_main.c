@@ -1,17 +1,98 @@
-// test_main.c
 #include <stdio.h>
-
-// Prototypes of test functions from other files
-void testDijkstraOnRandomGraph(); // from test_dijkstra.c
-// ... other test functions ...
+#include <assert.h>
+#include "dijkstra.h"
+#include "approximate_solution.h"
+#include "road_network.h"
+#include "time.h"
+#include "test_main.h"
+#include "test_utilities.h"
 
 int main() {
-    printf("Running Dijkstra tests...\n");
-    testDijkstraOnRandomGraph();
-    // ... call other test functions ...
+    // Initialize the road network
+    int rows = 5, cols = 5;
+    RoadNetwork* network = initializeRoadNetwork(rows, cols);
 
-    // Repeat the structure for Approximate Solution tests
+    printf("Enter starting point (x y): ");
+    Point start;
+    scanf("%d %d", &start.x, &start.y);
 
-    printf("All tests finished.\n");
+    printf("Enter ending point (x y): ");
+    Point end;
+    scanf("%d %d", &end.x, &end.y);
+
+    // Run the Dijkstra's test with timing
+    printf("\nRunning Dijkstra's Algorithm...\n");
+    startTimer();
+    runDijkstraTest(network, start, end);
+    stopTimer();
+    printf("Time elapsed for Dijkstra's Algorithm: %f seconds\n", getTimeElapsed());
+
+    // Run the approximate solution test with timing
+    printf("\nRunning Approximate Solution...\n");
+    startTimer();
+    runApproximateTest(network, start, end);
+    stopTimer();
+    printf("Time elapsed for Approximate Solution: %f seconds\n", getTimeElapsed());
+
+    // Compare solutions
+    printf("\nComparing Solutions...\n");
+    compareSolutions(network, start, end);
+
+    // Measure memory usage
+    int memoryUsage = getMemoryUsage();
+    printf("Memory usage: %d KB\n", memoryUsage);
+
+    // Run unit tests for both algorithms
+    printf("\nRunning Dijkstra's Algorithm Tests...\n");
+    testDijkstra();
+
+    printf("\nRunning Approximate Solution Tests...\n");
+    testApproximateSolution();
+
+    printf("\nAll tests completed!\n");
+
+    // Free the dynamically allocated memory
+    freeRoadNetwork(network);
+
     return 0;
+}
+
+void runDijkstraTest(RoadNetwork* network, Point start, Point end) {
+    int dist = dijkstra(network, start, end);
+    printf("Dijkstra's distance: %d\n", dist);
+}
+
+void runApproximateTest(RoadNetwork* network, Point start, Point end) {
+    int dist = approximateSolution(network, start, end);
+    printf("Approximate solution distance: %d\n", dist);
+}
+
+void compareSolutions(RoadNetwork* network, Point start, Point end) {
+    int dijkstraDist = dijkstra(network, start, end);
+    int approxDist = approximateSolution(network, start, end);
+    printf("Dijkstra's distance: %d\n", dijkstraDist);
+    printf("Approximate distance: %d\n", approxDist);
+    if (dijkstraDist == approxDist) {
+        printf("Both solutions are equal!\n");
+    } else {
+        printf("The solutions differ!\n");
+    }
+}
+
+void testDijkstra() {
+    RoadNetwork* testNetwork = initializeRoadNetwork(5, 5);
+    initializeFixedGraph(testNetwork, 1);  // Initialize with all 1s
+    Point start = {0, 0};
+    Point end = {4, 4};
+    assert(dijkstra(testNetwork, start, end) == 8);  // shortest path for a 5x5 grid with all 1s
+    freeRoadNetwork(testNetwork);
+}
+
+void testApproximateSolution() {
+    RoadNetwork* testNetwork = initializeRoadNetwork(5, 5);
+    initializeFixedGraph(testNetwork, 1);  // Initialize with all 1s
+    Point start = {0, 0};
+    Point end = {4, 4};
+    assert(approximateSolution(testNetwork, start, end) >= 8);  
+    freeRoadNetwork(testNetwork);
 }
