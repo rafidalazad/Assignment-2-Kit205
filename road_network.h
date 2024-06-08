@@ -21,4 +21,8 @@ RoadNetwork* initializeRoadNetwork(int rows, int cols);
 // Function to free the allocated memory for the road network
 void freeRoadNetwork(RoadNetwork* network);
 
+// Function to load the road network from an .mtx file
+// The .mtx file format is expected to be a sparse matrix format
+RoadNetwork* loadRoadNetworkFromFile(const char* filename);
+
 #endif // ROAD_NETWORK_H
