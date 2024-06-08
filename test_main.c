@@ -131,3 +131,4 @@ void testApproximateSolution() {
     assert(approximateSolution(testNetwork, start, end) >= 8);  
     freeRoadNetwork(testNetwork);
 }
+
