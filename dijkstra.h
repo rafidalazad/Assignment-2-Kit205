@@ -16,9 +16,14 @@ typedef struct {
     int height;         // Height of the grid
 } RoadNetwork;
 
+// Function to initialize the road network with given dimensions
+RoadNetwork* initializeRoadNetwork(int width, int height);
+
+// Function to free the memory allocated for the road network
+void freeRoadNetwork(RoadNetwork* network);
+
 // Function to compute the shortest path in the road network using Dijkstra's algorithm
-// between the specified start and end points.
-// Returns the total weight/cost of the computed path.
+// between the specified start and end points. Returns the total weight/cost of the computed path.
 int dijkstra(RoadNetwork* network, Point start, Point end);
 
 // Function to find the vertex with minimum distance value, from the set of vertices not yet included in the shortest path tree
@@ -34,3 +39,4 @@ void printSolution(int dist[], int V);
 void executeDijkstraGraph(Graph* g);
 
 #endif // DIJKSTRA_H
+
