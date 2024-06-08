@@ -57,6 +57,16 @@ Graph *readGraph(const char *filename) {
     return g;
 }
 
+void calculateInDegrees(Graph *graph, int *inDegrees) {
+    for (int i = 0; i < graph->V; i++) {
+        EdgeNodePtr current = graph->edges[i].head;
+        while (current != NULL) {
+            inDegrees[current->edge.to_vertex]++;
+            current = current->next;
+        }
+    }
+}
+
 void freeGraph(Graph *g) {
     for (int i = 0; i < g->V; i++) {
         EdgeNodePtr current = g->edges[i].head;
@@ -70,6 +80,3 @@ void freeGraph(Graph *g) {
     free(g);
 }
 
-    free(g->edges);
-    free(g);
-}
