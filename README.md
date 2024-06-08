@@ -17,6 +17,7 @@ Files
   - `test_main.c` & `test_main.h`
   - `test_utilities.c` & `test_utilities.h`
   - `tests.c`
+use the graphviz.dot file in https://dreampuf.github.io/GraphvizOnline/ to visualize the graph
 
 Compilation
 To compile the project, use the provided Makefile. Open a terminal in the project directory and run:
