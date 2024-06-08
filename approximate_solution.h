@@ -8,7 +8,7 @@ typedef struct {
 } Point;
 
 // Represents a node used for pathfinding (like A* algorithm)
-typedef struct {
+typedef struct Node {
     Point position;         // Position of this node
     int gCost;              // Cost from the start node
     int hCost;              // Estimated cost to the end node (heuristic)
