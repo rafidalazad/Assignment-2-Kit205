@@ -4,8 +4,17 @@
 
 Graph *createGraph(int V) {
     Graph *g = (Graph *)malloc(sizeof(Graph));
+    if (!g) {
+        printf("Memory allocation failed for graph\n");
+        exit(EXIT_FAILURE);
+    }
     g->V = V;
     g->edges = (EdgeList *)malloc(V * sizeof(EdgeList));
+    if (!g->edges) {
+        printf("Memory allocation failed for edge lists\n");
+        free(g);
+        exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < V; i++) {
         g->edges[i].head = NULL;
     }
@@ -14,6 +23,10 @@ Graph *createGraph(int V) {
 
 void addEdge(Graph *g, int from, int to, int weight) {
     EdgeNodePtr newNode = (EdgeNodePtr)malloc(sizeof(struct edgeNode));
+    if (!newNode) {
+        printf("Memory allocation failed for new edge node\n");
+        exit(EXIT_FAILURE);
+    }
     newNode->edge.to_vertex = to;
     newNode->edge.weight = weight;
     newNode->next = g->edges[from].head;
@@ -28,7 +41,12 @@ Graph *readGraph(const char *filename) {
     }
 
     int V, from, to, weight;
-    fscanf(file, "%d", &V);
+    if (fscanf(file, "%d", &V) != 1) {
+        printf("Error reading number of vertices\n");
+        fclose(file);
+        return NULL;
+    }
+
     Graph *g = createGraph(V);
     
     while (fscanf(file, "%d,%d,%d", &from, &to, &weight) == 3) {
@@ -48,6 +66,10 @@ void freeGraph(Graph *g) {
             free(temp);
         }
     }
+    free(g->edges);
+    free(g);
+}
+
     free(g->edges);
     free(g);
 }
