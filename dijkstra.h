@@ -1,6 +1,8 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
+#include "graph.h"
+
 // Each point in the grid has x and y coordinates
 typedef struct {
     int x;
@@ -18,5 +20,17 @@ typedef struct {
 // between the specified start and end points.
 // Returns the total weight/cost of the computed path.
 int dijkstra(RoadNetwork* network, Point start, Point end);
+
+// Function to find the vertex with minimum distance value, from the set of vertices not yet included in the shortest path tree
+int minDistance(int dist[], bool sptSet[], int V);
+
+// Implementation of Dijkstra's algorithm for finding the shortest path from a source vertex to all other vertices
+void dijkstraGraph(Graph* g, int src, int dist[]);
+
+// Function to print the shortest distances from the source to all vertices
+void printSolution(int dist[], int V);
+
+// Function to execute Dijkstra's algorithm and demonstrate its functionality
+void executeDijkstraGraph(Graph* g);
 
 #endif // DIJKSTRA_H
