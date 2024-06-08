@@ -1,4 +1,3 @@
-// graph.c
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
@@ -21,29 +20,34 @@ void addEdge(Graph *g, int from, int to, int weight) {
     g->edges[from].head = newNode;
 }
 
-Graph *readGraph() {
-    int V, E, to, weight;
-    scanf("%d", &V);
-    Graph *g = createGraph(V);
-    for (int i = 0; i < V; i++) {
-        scanf("%d", &E);
-        for (int j = 0; j < E; j++) {
-            scanf("%d,%d", &to, &weight);
-            addEdge(g, i, to, weight);
-        }
+Graph *readGraph(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        printf("Error opening file!\n");
+        return NULL;
     }
+
+    int V, from, to, weight;
+    fscanf(file, "%d", &V);
+    Graph *g = createGraph(V);
+    
+    while (fscanf(file, "%d,%d,%d", &from, &to, &weight) == 3) {
+        addEdge(g, from, to, weight);
+    }
+    
+    fclose(file);
     return g;
 }
 
-void calculateInDegrees(Graph *graph, int *inDegrees) {
-    for (int i = 0; i < graph->V; i++) {
-        inDegrees[i] = 0;
-    }
-    for (int i = 0; i < graph->V; i++) {
-        EdgeNodePtr current = graph->edges[i].head;
+void freeGraph(Graph *g) {
+    for (int i = 0; i < g->V; i++) {
+        EdgeNodePtr current = g->edges[i].head;
         while (current != NULL) {
-            inDegrees[current->edge.to_vertex]++;
+            EdgeNodePtr temp = current;
             current = current->next;
+            free(temp);
         }
     }
+    free(g->edges);
+    free(g);
 }
