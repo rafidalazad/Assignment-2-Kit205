@@ -1,6 +1,6 @@
 Assignment 2
 
- Introduction
+
 This project implements a graph data structure and algorithms to solve shortest path problems in a road network. The main algorithms implemented are Dijkstra's algorithm and an approximate solution algorithm.
 
 Files
