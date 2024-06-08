@@ -39,8 +39,7 @@ void calculateInDegrees(Graph *graph, int *inDegrees);
 // Function to free all dynamically allocated memory for the graph
 void freeGraph(Graph *g);
 
-#endif // GRAPH_H
-
-void freeGraph(Graph *g);
+// Generate a random graph with V vertices
+Graph* generateRandomGraph(int V);
 
 #endif // GRAPH_H
