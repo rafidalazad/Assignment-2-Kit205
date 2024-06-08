@@ -4,6 +4,7 @@
 #include "approximate_solution.h"
 #include "road_network.h"
 #include "time.h"
+#include "test_utilities.h"
 
 // Function prototypes
 void runDijkstraTest(RoadNetwork* network, Point start, Point end);
@@ -15,7 +16,7 @@ void testApproximateSolution();
 int main() {
     // Initialize the road network
     int rows = 5, cols = 5;
-    RoadNetwork* network = initializeRoadNetwork(rows, cols); 
+    RoadNetwork* network = initializeRoadNetwork(rows, cols);
 
     printf("Enter starting point (x y): ");
     Point start;
@@ -86,11 +87,7 @@ void compareSolutions(RoadNetwork* network, Point start, Point end) {
 
 void testDijkstra() {
     RoadNetwork* testNetwork = initializeRoadNetwork(5, 5);
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            testNetwork->grid[i][j] = 1;  // setting all grid values to 1 for simplicity
-        }
-    }
+    initializeFixedGraph(testNetwork, 1);  // Initialize with all 1s
     Point start = {0, 0};
     Point end = {4, 4};
     assert(dijkstra(testNetwork, start, end) == 8);  // shortest path for a 5x5 grid with all 1s
@@ -99,13 +96,10 @@ void testDijkstra() {
 
 void testApproximateSolution() {
     RoadNetwork* testNetwork = initializeRoadNetwork(5, 5);
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            testNetwork->grid[i][j] = 1;  // setting all grid values to 1 for simplicity
-        }
-    }
+    initializeFixedGraph(testNetwork, 1);  // Initialize with all 1s
     Point start = {0, 0};
     Point end = {4, 4};
     assert(approximateSolution(testNetwork, start, end) >= 8);  
     freeRoadNetwork(testNetwork);
 }
+
