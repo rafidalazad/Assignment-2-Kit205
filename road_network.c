@@ -1,4 +1,3 @@
-
 #include "road_network.h"
 #include <stdlib.h>  // For dynamic memory allocation and deallocation
 #include <stdio.h>   // For error handling and debugging
@@ -61,3 +60,36 @@ void freeRoadNetwork(RoadNetwork* network) {
     // Free the network structure itself
     free(network);
 }
+
+// Function to load the road network from an .mtx file
+// The .mtx file format is expected to be a sparse matrix format
+RoadNetwork* loadRoadNetworkFromFile(const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        printf("Error opening file: %s\n", filename);
+        return NULL;
+    }
+
+    int rows, cols, non_zero_entries;
+    fscanf(file, "%%MatrixMarket matrix coordinate pattern symmetric\n");
+    while (fgetc(file) == '%') {
+        while (fgetc(file) != '\n');
+    }
+    fscanf(file, "%d %d %d\n", &rows, &cols, &non_zero_entries);
+
+    RoadNetwork* network = initializeRoadNetwork(rows, cols);
+    if (!network) {
+        fclose(file);
+        return NULL;
+    }
+
+    int from, to;
+    while (fscanf(file, "%d %d\n", &from, &to) == 2) {
+        network->grid[from - 1][to - 1] = 1; // Assuming unweighted graph as given by the example
+        network->grid[to - 1][from - 1] = 1; // Symmetric
+    }
+
+    fclose(file);
+    return network;
+}
+
