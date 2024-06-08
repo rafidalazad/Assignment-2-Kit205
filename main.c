@@ -57,16 +57,43 @@ void testApproxAlgorithm() {
     freeRoadNetwork(network);
 }
 
-// Main function to execute the tests and demonstrate the algorithms
-int main() {
+// Function to load and test a graph from a specified file
+void loadAndTestGraph(const char *filename) {
     // Read the graph from file
-    Graph *g = readGraph("input.txt");
+    Graph *g = readGraph(filename);
     if (!g) {
-        return 1; // Exit if the graph cannot be read
+        return; // Exit if the graph cannot be read
     }
 
     // Test Dijkstra's algorithm on the graph
     testDijkstra(g);
+
+    // Free the dynamically allocated memory
+    freeGraph(g);
+}
+
+// Main function to execute the tests and demonstrate the algorithms
+int main() {
+    int choice;
+    printf("Select the dataset to load:\n");
+    printf("1. Minnesota road network\n");
+    printf("2. Belgium road network\n");
+    printf("Enter your choice (1 or 2): ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            printf("Loading Minnesota road network...\n");
+            loadAndTestGraph("road-minnesota.mtx");
+            break;
+        case 2:
+            printf("Loading Belgium road network...\n");
+            loadAndTestGraph("road-belgium-osm.mtx");
+            break;
+        default:
+            printf("Invalid choice! Exiting...\n");
+            return 1;
+    }
 
     // Initialize the road network for the additional tests
     int rows = 5, cols = 5;
@@ -105,7 +132,6 @@ int main() {
 
     // Free the dynamically allocated memory
     freeRoadNetwork(network);
-    freeGraph(g);
 
     return 0;
 }
